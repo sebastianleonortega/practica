@@ -1,0 +1,52 @@
+const database = 'noticias';
+const collection1= 'Noticia';
+
+use (database);
+
+db.createCollection(collection1);
+
+db.usuario.aggregate(
+  [
+   {
+    $match: {   //para consultar los usuarios de una noticia
+      _id:'u01'
+    } 
+   },
+  {
+    $lookup: {   // JOIN -> para hacer consultas dentro de dos colecciones
+      from: 'noticia',
+      localField: '_id',
+      foreignField: 'usuario',
+      as: 'noticia'
+    }
+  }
+])
+
+db.noticia.insertOne({
+    _id: 'n03',
+    titulo: "accidente acuatico",
+    cuerpo: "un fuerte accidente bajo el mar ucurrio donde vive bob esponja",
+    fecha: "2022-20-11",
+    usuario: ['u01']
+})
+
+/*db.usuario.insertOne({ //-> creamos la collecion de usuario
+    _id: 'u02',
+    nombre: 'maria',
+    usuario: 'maria02',
+    cuenta_tw: 'maria022',
+    descripcion: 'esta es la cuenta de maria',
+    telefono: ['3187327647','3256543897'],
+    direccion:{
+        calle: ' 122 ',
+        numero: '132',
+        ciudad: 'santander'
+    }
+
+})*/
+//db.usuario.find({nombre: "camila"}) //-> para hacer una busqueda en especifico
+db.usuario.remove({}) //-> elimina los datos de una colleccion
+
+db.usuario.find({})
+
+db.noticia.find({})
